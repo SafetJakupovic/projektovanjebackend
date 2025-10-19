@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.List;
+
 
 @Configuration
 @EnableWebSecurity
@@ -22,14 +24,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()  // Allow H2 console
+                        .requestMatchers("/h2-console/**", "/auth/**").permitAll()  // Allow H2 console
                         .anyRequest().authenticated()
                 )
                 .httpBasic(basic -> {})           // Enable Basic Auth (no redirects)
                 .csrf(csrf -> csrf.disable())     // Disable CSRF for APIs
                 .headers(headers -> headers
-                    .frameOptions(frame -> frame.disable())
-        );  // Allow frames for H2
+                        .frameOptions(frame -> frame.disable())
+                );  // Allow frames for H2
 
         return http.build();
     }
